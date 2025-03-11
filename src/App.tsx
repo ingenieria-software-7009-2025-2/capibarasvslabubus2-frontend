@@ -19,7 +19,7 @@ function App() {
       <h1>Capibaras VS Labubus 2</h1>
       <div className="card">
         <button onClick={() => {setCount((count) => count + 1) 
-                              alert('¡Hola!')}}>
+                              alert('¡Hola usuario ' +(count+1)+ ' !')}}>
           count is {count}
         </button>
       </div>
