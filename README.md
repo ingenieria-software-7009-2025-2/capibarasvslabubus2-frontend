@@ -1,20 +1,23 @@
 # capibarasvslabubus2-frontend
 
 Frontend for the Capibaras vs Labubus 2 Urban Incidents project.
+Technologies used: 
+- React.js
+- TypeScript
+- Vite.js
 
 ## Building the project with Docker
 
-To build the project with Docker, you need to have Docker installed and Docker Compose. You can install Docker with the following command:
-```bash
-sudo apt install docker.io
-```
+To build the project with Docker, you need to have Docker installed and Docker Compose.
 
 ## Building the project
 
 To build the project, you can run the following command:
 ```bash
-docker-compose up --build 
+docker compose up --build 
 ```
+
+To stop the project, you can use **Ctrl + C** in the terminal.
 
 You can access the project in the browser with the following URL:
 ```
@@ -23,16 +26,17 @@ http://localhost:8080
 
 
 
+## Detached mode
+
 If you  want detached mode, you can run:
 
 ```bash
-docker-compose up --build -d
+docker compose up --build -d
 ```
 
-## Stop the project
-You can stop the project with Ctrl+C or with the following command:
+You can stop the project with the following command:
 ```bash
-docker-compose down
+docker compose down
 ```
 
 
