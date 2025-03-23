@@ -1,29 +1,44 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    alert(`Bienvenido, ${username}!`)
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Capibaras VS Labubus 2</h1>
-      <div className="card">
-        <button onClick={() => {setCount((count) => count + 1) 
-                              alert('¡Hola usuario ' +(count+1)+ ' !')}}>
-          count is {count}
-        </button>
-      </div>
-    </>
+    <div className="login-container">
+      <h1>Iniciar Sesión</h1>
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="form-group">
+          <label htmlFor="username">Usuario:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Ingresa tu usuario"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Contraseña:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Ingresa tu contraseña"
+            required
+          />
+        </div>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
   )
 }
 
