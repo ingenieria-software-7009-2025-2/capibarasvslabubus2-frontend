@@ -12,6 +12,9 @@ interface User {
 function MyAccount() {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState('');
+  const [updateEmail, setUpdateEmail] = useState('');
+  const [updatePassword, setUpdatePassword] = useState('');
+  const [updateMessage, setUpdateMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +36,7 @@ function MyAccount() {
       })
       .then(data => {
         setUser(data);
+        setUpdateEmail(data.email); // Pre-fill the email field with current email
       })
       .catch(err => {
         console.error(err);
@@ -67,20 +71,85 @@ function MyAccount() {
     }
   };
 
+  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('No token provided. Please login.');
+      return;
+    }
+
+    // Prepare update data
+    const updateData: any = { email: updateEmail };
+    // Solo incluir password si se ha ingresado un valor
+    if (updatePassword.trim() !== '') {
+      updateData.password = updatePassword;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8080/v1/users/me', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify(updateData)
+      });
+      if (response.ok) {
+        const updatedUser = await response.json();
+        setUser(updatedUser);
+        setUpdateMessage('User info updated successfully.');
+      } else {
+        setUpdateMessage('Failed to update user info.');
+      }
+    } catch (error) {
+      console.error('Error updating user info:', error);
+      setUpdateMessage('Error connecting to update endpoint.');
+    }
+  };
+
   return (
     <div className="myaccount-container">
       <h1>My Account</h1>
-      {error && <p>{error}</p>}
+      {error && <p className="error">{error}</p>}
       {user ? (
         <div className="user-info">
           <p><strong>ID:</strong> {user.id}</p>
           <p><strong>Email:</strong> {user.email}</p>
           <p><strong>Token:</strong> {user.token}</p>
-          
         </div>
       ) : (
         !error && <p>Loading...</p>
       )}
+      
+      <div className="update-user">
+        <h2>Update Your Information</h2>
+        <form onSubmit={handleUpdate}>
+          <div className="form-group">
+            <label htmlFor="updateEmail">Email:</label>
+            <input
+              type="email"
+              id="updateEmail"
+              value={updateEmail}
+              onChange={(e) => setUpdateEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="updatePassword">New Password:</label>
+            <input
+              type="password"
+              id="updatePassword"
+              value={updatePassword}
+              onChange={(e) => setUpdatePassword(e.target.value)}
+              placeholder="Enter new password (optional)"
+            />
+          </div>
+          <button type="submit">Update</button>
+        </form>
+        {updateMessage && <p>{updateMessage}</p>}
+      </div>
+      
       <div className="navigation-buttons">
         <button onClick={() => navigate('/')}>Home</button>
         <button onClick={handleLogout}>Logout</button>
