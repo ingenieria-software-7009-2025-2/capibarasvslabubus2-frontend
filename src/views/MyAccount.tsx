@@ -14,7 +14,7 @@ function MyAccount() {
   const [error, setError] = useState('');
   const [updateEmail, setUpdateEmail] = useState('');
   const [updatePassword, setUpdatePassword] = useState('');
-  const [updateMessage, setUpdateMessage] = useState('');
+  const [showUpdate, setShowUpdate] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function MyAccount() {
       })
       .then(data => {
         setUser(data);
-        setUpdateEmail(data.email); // Pre-fill the email field with current email
+        setUpdateEmail(data.email);
       })
       .catch(err => {
         console.error(err);
@@ -50,7 +50,6 @@ function MyAccount() {
       setError('No token available for logout');
       return;
     }
-
     try {
       const response = await fetch('http://localhost:8080/v1/users/logout', {
         method: 'POST',
@@ -79,9 +78,7 @@ function MyAccount() {
       return;
     }
 
-    // Prepare update data
     const updateData: any = { email: updateEmail };
-    // Solo incluir password si se ha ingresado un valor
     if (updatePassword.trim() !== '') {
       updateData.password = updatePassword;
     }
@@ -98,13 +95,13 @@ function MyAccount() {
       if (response.ok) {
         const updatedUser = await response.json();
         setUser(updatedUser);
-        setUpdateMessage('User info updated successfully.');
+        window.alert('User info updated successfully.');
       } else {
-        setUpdateMessage('Failed to update user info.');
+        window.alert('Failed to update user info.');
       }
     } catch (error) {
       console.error('Error updating user info:', error);
-      setUpdateMessage('Error connecting to update endpoint.');
+      window.alert('Error connecting to update endpoint.');
     }
   };
 
@@ -122,33 +119,41 @@ function MyAccount() {
         !error && <p>Loading...</p>
       )}
       
-      <div className="update-user">
-        <h2>Update Your Information</h2>
-        <form onSubmit={handleUpdate}>
-          <div className="form-group">
-            <label htmlFor="updateEmail">Email:</label>
-            <input
-              type="email"
-              id="updateEmail"
-              value={updateEmail}
-              onChange={(e) => setUpdateEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="updatePassword">New Password:</label>
-            <input
-              type="password"
-              id="updatePassword"
-              value={updatePassword}
-              onChange={(e) => setUpdatePassword(e.target.value)}
-              placeholder="Enter new password (optional)"
-            />
-          </div>
-          <button type="submit">Update</button>
-        </form>
-        {updateMessage && <p>{updateMessage}</p>}
+      {/* Update section */}
+      <div className="update-toggle">
+        <button onClick={() => setShowUpdate(!showUpdate)}>
+          {showUpdate ? 'Cancel Update' : 'Update Your Information'}
+        </button>
       </div>
+      
+      {showUpdate && (
+        <div className="update-user">
+          <h2>Update Your Information</h2>
+          <form onSubmit={handleUpdate}>
+            <div className="form-group">
+              <label htmlFor="updateEmail">Email:</label>
+              <input
+                type="email"
+                id="updateEmail"
+                value={updateEmail}
+                onChange={(e) => setUpdateEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="updatePassword">New Password:</label>
+              <input
+                type="password"
+                id="updatePassword"
+                value={updatePassword}
+                onChange={(e) => setUpdatePassword(e.target.value)}
+                placeholder="Enter new password (optional)"
+              />
+            </div>
+            <button type="submit">Update</button>
+          </form>
+        </div>
+      )}
       
       <div className="navigation-buttons">
         <button onClick={() => navigate('/')}>Home</button>
