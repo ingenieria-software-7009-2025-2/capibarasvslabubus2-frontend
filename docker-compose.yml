@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   frontend:
     build:
@@ -7,10 +5,10 @@ services:
       dockerfile: Dockerfile
     container_name: capibarasvslabubus2-frontend
     ports:
-      - "8080:5173"  # Mapeo correcto del puerto
+      - "5173:5173"  
     volumes:
       - .:/app
-      - /app/node_modules  # Evita conflictos con dependencias locales
+      - /app/node_modules  
     environment:
       - CHOKIDAR_USEPOLLING=true
     command: ["npm", "run", "dev", "--", "--host"]

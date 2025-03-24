@@ -21,7 +21,7 @@ To stop the project, you can use **Ctrl + C** in the terminal.
 
 You can access the project in the browser with the following URL:
 ```
-http://localhost:8080
+http://localhost:5173
 ```
 
 
