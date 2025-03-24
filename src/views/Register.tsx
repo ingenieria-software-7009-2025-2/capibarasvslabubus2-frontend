@@ -1,36 +1,33 @@
 import { useState } from 'react';
 import '../App.css';
 
-function Login() {
+function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Object to be sent to the backend
-    const loginData = {
+    const registerData = {
       email: email,
       password: password
     };
 
     try {
-      const response = await fetch('http://localhost:8080/v1/users/login', {
+      const response = await fetch('http://localhost:8080/v1/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(loginData)
+        body: JSON.stringify(registerData)
       });
 
       if (response.ok) {
         const user = await response.json();
-        setMessage(`Welcome, ${user.email}`);
-      } else if (response.status === 404) {
-        setMessage('Incorrect email or password');
+        setMessage(`User registered: ${user.email}`);
       } else {
-        setMessage('An error occurred during login');
+        setMessage('Error registering user');
       }
     } catch (error) {
       console.error('Error connecting to the backend:', error);
@@ -39,9 +36,9 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <h1>Sign In</h1>
-      <form onSubmit={handleSubmit} className="login-form">
+    <div className="register-container">
+      <h1>Register</h1>
+      <form onSubmit={handleRegister}>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
@@ -64,11 +61,11 @@ function Login() {
             required
           />
         </div>
-        <button type="submit">Sign In</button>
+        <button type="submit">Register</button>
       </form>
       {message && <p>{message}</p>}
     </div>
   );
 }
 
-export default Login;
+export default Register;

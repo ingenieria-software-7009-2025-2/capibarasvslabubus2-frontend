@@ -7,10 +7,15 @@ function Home() {
     navigate('/login');
   };
 
+  const goToRegister = () => {
+    navigate('/register');
+  };
+
   return (
     <div className="home-container">
-      <h1>Welcome to the Urban Incidents App</h1>
-      <button onClick={goToLogin}>Log In</button>
+      <h1>Welcome to the App</h1>
+      <button onClick={goToLogin}>Sign In</button>
+      <button onClick={goToRegister}>Register</button>
     </div>
   );
 }
