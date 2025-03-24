@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
 function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [registered, setRegistered] = useState(false);
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,6 +29,7 @@ function Register() {
       if (response.ok) {
         const user = await response.json();
         setMessage(`User registered: ${user.email}`);
+        setRegistered(true); // Registration succeeded
       } else {
         setMessage('Error registering user');
       }
@@ -64,6 +68,10 @@ function Register() {
         <button type="submit">Register</button>
       </form>
       {message && <p>{message}</p>}
+      <div className="navigation-buttons">
+        <button onClick={() => navigate('/')}>Home</button>
+        {registered && <button onClick={() => navigate('/login')}>Sign In</button>}
+      </div>
     </div>
   );
 }

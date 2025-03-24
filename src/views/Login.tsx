@@ -1,15 +1,16 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Object to be sent to the backend
     const loginData = {
       email: email,
       password: password
@@ -26,7 +27,8 @@ function Login() {
 
       if (response.ok) {
         const user = await response.json();
-        setMessage(`Welcome, ${user.email}`);
+        localStorage.setItem('token', user.token);
+        navigate('/myaccount');
       } else if (response.status === 404) {
         setMessage('Incorrect email or password');
       } else {
@@ -67,6 +69,10 @@ function Login() {
         <button type="submit">Sign In</button>
       </form>
       {message && <p>{message}</p>}
+      <div className="navigation-buttons">
+        <button onClick={() => navigate('/')}>Home</button>
+        <button onClick={() => navigate('/register')}>Register</button>
+      </div>
     </div>
   );
 }
