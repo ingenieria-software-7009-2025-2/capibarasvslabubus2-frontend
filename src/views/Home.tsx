@@ -11,11 +11,16 @@ function Home() {
     navigate('/register');
   };
 
+  const goToMyAccount = () => {
+    navigate('/myaccount');
+  };
+
   return (
     <div className="home-container">
       <h1>Welcome to the App</h1>
       <button onClick={goToLogin}>Sign In</button>
       <button onClick={goToRegister}>Register</button>
+      <button onClick={goToMyAccount}>My Account</button>
     </div>
   );
 }

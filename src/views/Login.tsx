@@ -6,10 +6,15 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [loginFailed, setLoginFailed] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Reseteamos el mensaje y el estado de error
+    setMessage('');
+    setLoginFailed(false);
 
     const loginData = {
       email: email,
@@ -30,7 +35,8 @@ function Login() {
         localStorage.setItem('token', user.token);
         navigate('/myaccount');
       } else if (response.status === 404) {
-        setMessage('Incorrect email or password');
+        setMessage('Incorrect email or password. If you don’t have an account, please register.');
+        setLoginFailed(true);
       } else {
         setMessage('An error occurred during login');
       }
@@ -71,7 +77,9 @@ function Login() {
       {message && <p>{message}</p>}
       <div className="navigation-buttons">
         <button onClick={() => navigate('/')}>Home</button>
-        <button onClick={() => navigate('/register')}>Register</button>
+        {loginFailed && (
+          <button onClick={() => navigate('/register')}>Register</button>
+        )}
       </div>
     </div>
   );
