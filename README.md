@@ -24,3 +24,4 @@ Use the following command to visualize the project in dev mode:
 npm run dev
 ```
 
+## version 1.0.0
